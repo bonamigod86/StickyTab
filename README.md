@@ -89,9 +89,30 @@ A single global store holds the whole app: `lang`, `products`, `customers`, open
 - The `useT()` hook returns a `t(key, vars)` function that interpolates `{count}`, `{name}`, `{total}`, etc., and is memoized per language.
 - Count-sensitive strings use dedicated singular/plural keys selected via ternary.
 
+### Desktop app (Tauri)
+StickyTab ships as a **native Windows desktop app** built with [Tauri v2](https://tauri.app):
+- The Next.js app is exported as **static files** (`next.config.ts` → `output: "export"`) and bundled inside a lightweight Rust shell (`src-tauri/`).
+- Small installers (~2–3 MB) with zero server and zero browser chrome.
+- Uses the WebView2 runtime (preinstalled on Windows 10/11).
+
+**Where data is stored** (desktop app): the WebView2 runtime persists the same `localStorage` store on disk, so your tabs survive closing and reopening the app:
+
+```
+C:\Users\<you>\AppData\Local\com.stickytab.desktop\EBWebView\Default\Local Storage\leveldb\
+```
+
+- This folder is **app-specific** (separate from Edge/Chrome), so clearing browser data won't touch it.
+- **Deleting that folder resets StickyTab** to a clean slate — back it up if you need to keep the data.
+- Uninstalling the app may leave this folder behind.
+
+```bash
+# Build the installers (produces MSI + NSIS .exe in src-tauri/target/release/bundle/)
+npm run tauri:build
+```
+
 ### Roadmap (planned)
-- **Tauri desktop wrapper** so data stays local even if browser storage is cleared (persisting to the OS user-data folder).
-- Print-ready receipt view for tickets.
+- **Print-ready receipt view** for tickets.
+- File-based persistence in the OS user-data folder (so data survives even if web storage is cleared).
 
 ---
 

@@ -30,6 +30,14 @@ yarn-debug.log*
 yarn-error.log*
 .pnpm-debug.log*
 
+# tauri / rust (build artifacts)
+.tauri/
+/src-tauri/target/
+/src-tauri/gen/schemas/
+
+# generated installers
+/dist/
+
 # env files (can opt-in for committing if needed)
 .env*
 
